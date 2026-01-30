@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIP32 & BIP38 Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BIP32 & BIP38 Generator</h1>
+            <div class="warning">
+                <strong>⚠️ Security Warning:</strong> This tool is for educational and testing purposes only.
+                Never use generated keys for real funds. Always use on a secure, offline computer for production use.
+            </div>
+        </header>
+
+        <!-- BIP32 Section -->
+        <section class="card">
+            <h2>BIP32 - Hierarchical Deterministic Wallet</h2>
+
+            <div class="section-group">
+                <h3>Generate Master Key</h3>
+                <div class="form-group">
+                    <label for="wordCount">Mnemonic Word Count:</label>
+                    <select id="wordCount">
+                        <option value="12" selected>12 words</option>
+                        <option value="24">24 words</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="customMnemonic">Custom Mnemonic (optional):</label>
+                    <textarea
+                        id="customMnemonic"
+                        placeholder="Leave empty to generate new, or enter existing mnemonic"
+                        rows="3"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bip39Passphrase">BIP39 Passphrase (optional):</label>
+                    <input
+                        type="password"
+                        id="bip39Passphrase"
+                        placeholder="Leave empty for no passphrase (25th word)"
+                    >
+                    <small>Optional passphrase (sometimes called "25th word") for additional security. Different passphrases will generate different wallets from the same mnemonic.</small>
+                </div>
+
+                <button id="generateBtn" class="btn btn-primary">Generate New Wallet</button>
+            </div>
+
+            <div id="masterKeyResults" class="results" style="display: none;">
+                <h3>Master Key Results</h3>
+
+                <div class="result-item">
+                    <label>Mnemonic Phrase:</label>
+                    <div class="output-box">
+                        <div id="mnemonicOutput" class="output-text"></div>
+                        <button class="btn-copy" data-target="mnemonicOutput">Copy</button>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <label>Seed (Hex):</label>
+                    <div class="output-box">
+                        <div id="seedOutput" class="output-text mono"></div>
+                        <button class="btn-copy" data-target="seedOutput">Copy</button>
+                    </div>
+                </div>
+
+                <div class="result-item" id="passphraseStatus" style="display: none;">
+                    <label>BIP39 Passphrase:</label>
+                    <div class="output-text">✓ Passphrase was used (25th word protection enabled)</div>
+                </div>
+
+                <div class="result-item">
+                    <label>Master Private Key (xprv):</label>
+                    <div class="output-box">
+                        <div id="masterPrivOutput" class="output-text mono"></div>
+                        <button class="btn-copy" data-target="masterPrivOutput">Copy</button>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <label>Master Public Key (xpub):</label>
+                    <div class="output-box">
+                        <div id="masterPubOutput" class="output-text mono"></div>
+                        <button class="btn-copy" data-target="masterPubOutput">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="derivationSection" class="section-group" style="display: none;">
+                <h3>Derive Child Keys</h3>
+
+                <div class="form-group">
+                    <label for="derivationPath">Derivation Path:</label>
+                    <input
+                        type="text"
+                        id="derivationPath"
+                        value="m/44'/0'/0'/0/0"
+                        placeholder="e.g., m/44'/0'/0'/0/0"
+                    >
+                    <small>Common paths: m/44'/0'/0'/0/0 (BIP44), m/49'/0'/0'/0/0 (BIP49), m/84'/0'/0'/0/0 (BIP84)</small>
+                </div>
+
+                <button id="deriveBtn" class="btn btn-secondary">Derive Key</button>
+                <button id="deriveMultipleBtn" class="btn btn-secondary">Derive Multiple (0-9)</button>
+            </div>
+
+            <div id="derivedResults" class="results" style="display: none;">
+                <h3>Derived Keys</h3>
+                <div id="derivedKeysContainer"></div>
+            </div>
+        </section>
+
+        <!-- BIP38 Section -->
+        <section class="card">
+            <h2>BIP38 - Password Protected Private Keys</h2>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="encrypt">Encrypt</button>
+                <button class="tab-btn" data-tab="decrypt">Decrypt</button>
+            </div>
+
+            <!-- Encrypt Tab -->
+            <div id="encrypt" class="tab-content active">
+                <div class="section-group">
+                    <h3>Encrypt Private Key</h3>
+
+                    <div class="form-group">
+                        <label for="encryptPrivateKey">Private Key (WIF format):</label>
+                        <input
+                            type="text"
+                            id="encryptPrivateKey"
+                            placeholder="5K... or L..."
+                        >
+                        <small>Starts with 5, K, or L</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="encryptPassword">Password (min 4 characters):</label>
+                        <input
+                            type="password"
+                            id="encryptPassword"
+                            placeholder="Enter strong password"
+                        >
+                    </div>
+
+                    <button id="encryptBtn" class="btn btn-primary">Encrypt</button>
+                </div>
+
+                <div id="encryptResults" class="results" style="display: none;">
+                    <h3>Encrypted Result</h3>
+
+                    <div class="result-item">
+                        <label>BIP38 Encrypted Key:</label>
+                        <div class="output-box">
+                            <div id="bip38Output" class="output-text mono"></div>
+                            <button class="btn-copy" data-target="bip38Output">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Key Type:</label>
+                        <div id="keyTypeOutput" class="output-text"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decrypt Tab -->
+            <div id="decrypt" class="tab-content">
+                <div class="section-group">
+                    <h3>Decrypt BIP38 Key</h3>
+
+                    <div class="form-group">
+                        <label for="decryptBip38Key">BIP38 Encrypted Key:</label>
+                        <input
+                            type="text"
+                            id="decryptBip38Key"
+                            placeholder="6PR..."
+                        >
+                        <small>Starts with 6P</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="decryptPassword">Password:</label>
+                        <input
+                            type="password"
+                            id="decryptPassword"
+                            placeholder="Enter password"
+                        >
+                    </div>
+
+                    <button id="decryptBtn" class="btn btn-primary">Decrypt</button>
+                </div>
+
+                <div id="decryptResults" class="results" style="display: none;">
+                    <h3>Decrypted Result</h3>
+
+                    <div class="result-item">
+                        <label>Private Key (WIF):</label>
+                        <div class="output-box">
+                            <div id="decryptedPrivateKey" class="output-text mono"></div>
+                            <button class="btn-copy" data-target="decryptedPrivateKey">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Bitcoin Address:</label>
+                        <div class="output-box">
+                            <div id="decryptedAddress" class="output-text mono"></div>
+                            <button class="btn-copy" data-target="decryptedAddress">Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="result-item">
+                        <label>Key Type:</label>
+                        <div id="decryptedKeyType" class="output-text"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Educational tool for BIP32 and BIP38 key generation. Use responsibly.</p>
+            <p>Never share your private keys or mnemonic phrases with anyone.</p>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

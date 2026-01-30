@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.bipgen</groupId>
+    <artifactId>bip-generator</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <vertx.version>4.5.1</vertx.version>
+        <bitcoinj.version>0.17</bitcoinj.version>
+        <main.verticle>com.bipgen.MainVerticle</main.verticle>
+    </properties>
+
+    <dependencies>
+        <!-- Vert.x Core -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- Vert.x Web -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- BitcoinJ for BIP32/BIP38 -->
+        <dependency>
+            <groupId>org.bitcoinj</groupId>
+            <artifactId>bitcoinj-core</artifactId>
+            <version>${bitcoinj.version}</version>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-json-schema</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+
+        <!-- JUnit for Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-junit5</artifactId>
+            <version>${vertx.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>io.vertx.core.Launcher</Main-Class>
+                                        <Main-Verticle>${main.verticle}</Main-Verticle>
+                                    </manifestEntries>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- GraalVM Native Image Plugin -->
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>0.10.1</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>build-native</id>
+                        <goals>
+                            <goal>compile-no-fork</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <imageName>bip-generator</imageName>
+                    <mainClass>io.vertx.core.Launcher</mainClass>
+                    <buildArgs>
+                        <buildArg>--no-fallback</buildArg>
+                        <buildArg>--report-unsupported-elements-at-runtime</buildArg>
+                        <buildArg>--allow-incomplete-classpath</buildArg>
+                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                        <buildArg>-H:ConfigurationFileDirectories=${project.basedir}/src/main/resources/META-INF/native-image</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

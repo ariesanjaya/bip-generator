@@ -1,0 +1,31 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": "webroot/.*"
+      },
+      {
+        "pattern": "META-INF/services/.*"
+      },
+      {
+        "pattern": ".*\\.properties"
+      },
+      {
+        "pattern": ".*\\.json"
+      },
+      {
+        "pattern": ".*\\.html"
+      },
+      {
+        "pattern": ".*\\.css"
+      },
+      {
+        "pattern": ".*\\.js"
+      },
+      {
+        "pattern": "org/bitcoinj/crypto/mnemonic/.*"
+      }
+    ]
+  },
+  "bundles": []
+}

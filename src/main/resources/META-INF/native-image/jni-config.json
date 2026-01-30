@@ -1,0 +1,11 @@
+[
+  {
+    "name": "java.lang.String"
+  },
+  {
+    "name": "java.lang.Class"
+  },
+  {
+    "name": "java.security.SecureRandom"
+  }
+]
