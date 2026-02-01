@@ -16,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -36,7 +35,6 @@ public class BipGeneratorApp extends Application {
     private String lastPassphrase = "";
 
     // Monospace font for key/address fields
-    private static final Font MONO_FONT = Font.font("Monospace", 12);
     private static final Font MONO_FONT_SMALL = Font.font("Monospace", 11);
 
     private static final String BG_COLOR = "#f8f9fa";

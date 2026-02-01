@@ -93,7 +93,7 @@
                                 <buildArg>--no-fallback</buildArg>
                                 <buildArg>--enable-url-protocols=https,http</buildArg>
                                 <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                                <buildArg>--initialize-at-build-time=com.sun.org.apache.xerces</buildArg>
+                                <buildArg>--initialize-at-build-time=com.sun.org.apache.xerces,com.google.zxing</buildArg>
                                 <buildArg>--add-exports=java.base/sun.security.provider=ALL-UNNAMED</buildArg>
                                 <buildArg>-O1</buildArg>
                                 <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
