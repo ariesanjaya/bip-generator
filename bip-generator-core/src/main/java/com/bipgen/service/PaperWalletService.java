@@ -170,18 +170,6 @@ public class PaperWalletService {
                 cs.showText(publicKey);
                 cs.endText();
 
-                // Passphrase
-                if (passphrase != null && !passphrase.isEmpty()) {
-                    bottomY -= 18;
-                    cs.beginText();
-                    cs.setFont(PDType1Font.HELVETICA_BOLD, 10);
-                    cs.newLineAtOffset(MARGIN, bottomY);
-                    cs.showText("Passphrase: ");
-                    cs.setFont(PDType1Font.COURIER, 9);
-                    cs.showText(truncateForLine(passphrase, 100));
-                    cs.endText();
-                }
-
                 // Master Private Key (xprv)
                 if (masterPrivateKey != null && !masterPrivateKey.isEmpty()) {
                     bottomY -= 18;

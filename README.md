@@ -1,161 +1,128 @@
-# BIP32 & BIP38 Generator
+# BIP Generator
 
-A web-based generator for BIP32 (Hierarchical Deterministic Wallets) and BIP38 (Password-Protected Private Keys) built with Vert.x Java and modern web technologies.
-
-**NEW: ✨ GraalVM Native Image Support** - Build standalone executables with instant startup!
+A BIP32 (Hierarchical Deterministic Wallets) and BIP38 (Password-Protected Private Keys) generator with both a web interface and a JavaFX desktop application.
 
 ## Features
 
 ### BIP32 - Hierarchical Deterministic Wallets
-- Generate new master keys with 12 or 24-word mnemonic phrases
-- Support for custom mnemonic input
-- **Optional BIP39 passphrase** (25th word) for additional security
-- Derive child keys using BIP32 derivation paths
-- Generate multiple addresses at once
-- Support for standard derivation paths (BIP44, BIP49, BIP84)
+- Generate master keys with 12 or 24-word mnemonic phrases
+- Custom mnemonic input support
+- Optional BIP39 passphrase (25th word)
+- Derive child keys using standard derivation paths (BIP44, BIP49, BIP84)
+- Batch-derive multiple addresses
+- Mnemonic validation
 
 ### BIP38 - Password-Protected Private Keys
 - Encrypt WIF private keys with password protection
 - Decrypt BIP38 encrypted keys
-- Support for both compressed and uncompressed keys
-- Secure password-based encryption using Scrypt
-- **Compliant BIP38 format** (keys start with "6P")
+- Compressed and uncompressed key support
+- Scrypt-based encryption (keys start with "6P")
+
+### Paper Wallet
+- Generate printable PDF paper wallets with QR codes
+
+## Project Structure
+
+This is a multi-module Maven project:
+
+```
+bip-generator/
+├── pom.xml                      # Parent POM
+├── bip-generator-core/          # Shared library (services, models)
+│   └── src/main/java/com/bipgen/
+│       ├── model/               # Data records (MasterKeyResult, etc.)
+│       └── service/             # BIP32Service, BIP38Service, PaperWalletService
+├── bip-generator-web/           # Vert.x web application
+│   └── src/main/java/com/bipgen/
+│       ├── MainVerticle.java
+│       └── handler/             # HTTP request handlers
+└── bip-generator-desktop/       # JavaFX desktop application
+    ├── build-native.sh          # GraalVM native image build script
+    └── src/main/java/com/bipgen/desktop/
+        ├── BipGeneratorApp.java # JavaFX application
+        └── Launcher.java        # Main entry point
+```
 
 ## Technology Stack
 
-- **Backend**: Vert.x 4.5.1 (Java)
-- **Crypto Libraries**: BitcoinJ 0.16.3, Bouncy Castle
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3
-- **Build Tool**: Maven
+- **Core**: BitcoinJ 0.17, Bouncy Castle, PDFBox, ZXing
+- **Web**: Vert.x 4.5.1, HTML/CSS/JS
+- **Desktop**: JavaFX 21
+- **Build**: Maven, GraalVM Native Image (optional)
+- **Java**: 17+
 
 ## Prerequisites
 
 - Java 17 or higher
 - Maven 3.6+
+- For the desktop module: JavaFX SDK (bundled via Maven)
+- For native builds: GraalVM with `native-image`
 
-## Installation
+## Building
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd bip-generator
-```
-
-2. Build the project:
+Build all modules:
 ```bash
 mvn clean package
 ```
 
-## Running the Application
-
-1. Start the server:
+Build a specific module:
 ```bash
-java -jar target/bip-generator-1.0-SNAPSHOT-fat.jar
+mvn clean package -pl bip-generator-core,bip-generator-desktop -am
 ```
 
-2. Open your browser and navigate to:
-```
-http://localhost:8080
-```
+## Running
 
-## API Endpoints
+### Web Application
 
-### BIP32 Endpoints
-
-#### Generate Master Key
-```
-POST /api/bip32/generate
-Content-Type: application/json
-
-{
-  "mnemonic": "optional custom mnemonic",
-  "wordCount": 12
-}
+```bash
+java -jar bip-generator-web/target/bip-generator-web-1.0.0-fat.jar
 ```
 
-Response:
-```json
-{
-  "mnemonic": "word1 word2 ... word12",
-  "masterPrivateKey": "xprv...",
-  "masterPublicKey": "xpub...",
-  "seed": "hex seed"
-}
+Then open `http://localhost:8080` in your browser.
+
+### Desktop Application
+
+```bash
+mvn -f bip-generator-desktop/pom.xml javafx:run
 ```
 
-#### Derive Child Key
-```
-POST /api/bip32/derive
-Content-Type: application/json
-
-{
-  "masterKey": "xprv...",
-  "path": "m/44'/0'/0'/0/0"
-}
+Or run the shaded JAR:
+```bash
+java -jar bip-generator-desktop/target/bip-generator-desktop-1.0.0.jar
 ```
 
-Response:
-```json
-{
-  "path": "m/44'/0'/0'/0/0",
-  "privateKey": "5K... (WIF)",
-  "publicKey": "hex public key",
-  "address": "Bitcoin address"
-}
+### Native Image (Desktop)
+
+Build a standalone native executable using GraalVM:
+
+```bash
+cd bip-generator-desktop
+./build-native.sh
 ```
 
-#### Derive Multiple Addresses
-```
-POST /api/bip32/derive-multiple
-Content-Type: application/json
+Prerequisites for native build:
+- GraalVM as `JAVA_HOME`
+- `native-image` component installed
+- GTK3 dev libraries on Linux (`sudo apt install libgtk-3-dev libglib2.0-dev`)
 
-{
-  "masterKey": "xprv...",
-  "pathPattern": "m/44'/0'/0'/0/*",
-  "count": 10
-}
-```
+The resulting binary will be at `bip-generator-desktop/target/bip-generator`.
 
-### BIP38 Endpoints
+## API Endpoints (Web Module)
 
-#### Encrypt Private Key
-```
-POST /api/bip38/encrypt
-Content-Type: application/json
+### BIP32
 
-{
-  "privateKey": "5K... (WIF)",
-  "password": "your password"
-}
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/bip32/generate` | Generate master key from mnemonic |
+| POST | `/api/bip32/derive` | Derive a child key |
+| POST | `/api/bip32/derive-multiple` | Derive multiple addresses |
 
-Response:
-```json
-{
-  "encryptedKey": "6PR... (BIP38)",
-  "compressed": true
-}
-```
+### BIP38
 
-#### Decrypt BIP38 Key
-```
-POST /api/bip38/decrypt
-Content-Type: application/json
-
-{
-  "encryptedKey": "6PR...",
-  "password": "your password"
-}
-```
-
-Response:
-```json
-{
-  "privateKey": "5K... (WIF)",
-  "address": "Bitcoin address",
-  "compressed": true
-}
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/bip38/encrypt` | Encrypt a private key |
+| POST | `/api/bip38/decrypt` | Decrypt a BIP38 key |
 
 ## Common Derivation Paths
 
@@ -165,67 +132,18 @@ Response:
 
 ## Security Considerations
 
-**⚠️ IMPORTANT SECURITY WARNINGS:**
-
 1. This tool is for **educational and testing purposes only**
 2. Never use generated keys for real funds without proper security measures
-3. Always run on a secure, offline computer for production key generation
-4. Never share your private keys or mnemonic phrases with anyone
-5. Use strong passwords (minimum 4 characters, recommend 12+) for BIP38 encryption
-6. The application does not store any keys on the server or in browser storage
+3. Run on a secure, offline computer for production key generation
+4. Never share private keys or mnemonic phrases
+5. Use strong passwords for BIP38 encryption
+6. The application does not persist any keys
 
-## Development
+## Testing
 
-### Project Structure
-```
-bip-generator/
-├── pom.xml
-├── src/
-│   ├── main/
-│   │   ├── java/com/bipgen/
-│   │   │   ├── MainVerticle.java
-│   │   │   ├── handler/
-│   │   │   │   ├── BIP32Handler.java
-│   │   │   │   └── BIP38Handler.java
-│   │   │   └── service/
-│   │   │       ├── BIP32Service.java
-│   │   │       └── BIP38Service.java
-│   │   └── resources/webroot/
-│   │       ├── index.html
-│   │       ├── css/style.css
-│   │       └── js/app.js
-│   └── test/
-│       └── java/com/bipgen/
-│           └── BIP32ServiceTest.java
-```
-
-### Running Tests
 ```bash
 mvn test
 ```
-
-### Building
-
-**Regular JAR:**
-```bash
-mvn clean package
-```
-
-**Native Image (requires GraalVM):**
-```bash
-# Windows
-build-native.bat
-
-# Linux/Mac
-chmod +x build-native.sh
-./build-native.sh
-```
-
-See **[NATIVE_IMAGE_GUIDE.md](NATIVE_IMAGE_GUIDE.md)** for detailed native image documentation.
-
-## License
-
-This project is for educational purposes. Use at your own risk.
 
 ## Resources
 
@@ -234,10 +152,6 @@ This project is for educational purposes. Use at your own risk.
 - [BIP39 Mnemonic](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
 - [BIP44 Multi-Account Hierarchy](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
 
-## Contributing
+## License
 
-Contributions are welcome! Please ensure all tests pass before submitting a pull request.
-
-## Support
-
-For issues and questions, please open an issue on the GitHub repository.
+This project is for educational purposes. Use at your own risk.

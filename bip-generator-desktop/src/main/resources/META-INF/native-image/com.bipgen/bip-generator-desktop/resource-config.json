@@ -1,0 +1,18 @@
+{
+  "resources": {
+    "includes": [
+      {"pattern": "com/sun/javafx/scene/control/skin/.*\\.css$"},
+      {"pattern": "com/sun/javafx/scene/layout/.*\\.css$"},
+      {"pattern": "com/sun/javafx/tk/quantum/.*"},
+      {"pattern": "com/sun/glass/ui/.*"},
+      {"pattern": "com/sun/prism/.*"},
+      {"pattern": "javafx/.*\\.css$"},
+      {"pattern": "org/bitcoinj/crypto/mnemonic/wordlist/english\\.txt$"},
+      {"pattern": "org/apache/pdfbox/resources/.*"},
+      {"pattern": "org/apache/fontbox/.*"},
+      {"pattern": "org/apache/pdfbox/.*\\.properties$"},
+      {"pattern": "META-INF/services/.*"}
+    ]
+  },
+  "bundles": []
+}

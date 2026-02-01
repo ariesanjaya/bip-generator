@@ -1,0 +1,387 @@
+[
+  {
+    "name": "com.bipgen.desktop.BipGeneratorApp",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.bipgen.desktop.Launcher",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.bipgen.service.BIP32Service",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.bipgen.service.BIP38Service",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.bipgen.service.PaperWalletService",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.TabPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.Tab",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.Label",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.TextField",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.PasswordField",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.TextArea",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.Button",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.ComboBox",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.Spinner",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.TableView",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.TableColumn",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.ScrollPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.ProgressIndicator",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.Alert",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.DialogPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.ButtonBar",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.ButtonType",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.stage.FileChooser",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.VBox",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.HBox",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.Region",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.Pane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.StackPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.BorderPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.layout.AnchorPane",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.Scene",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.stage.Stage",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TabPaneSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.LabelSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TextFieldSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TextAreaSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ButtonSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ComboBoxListViewSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.SpinnerSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TableViewSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TableColumnHeader",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TableHeaderRow",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ScrollPaneSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ProgressIndicatorSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ScrollBarSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ListViewSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.ListCellSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TableRowSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.TableCellSkin",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.control.skin.VirtualFlow",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.text.Text",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.text.Font",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.scene.image.ImageView",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.collections.FXCollections",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "javafx.application.Application",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.javafx.tk.quantum.QuantumToolkit",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.javafx.application.PlatformImpl",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.glass.ui.gtk.GtkApplication",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.glass.ui.gtk.GtkPlatformFactory",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.prism.es2.ES2Pipeline",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.prism.es2.ES2ResourceFactory",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.prism.sw.SWPipeline",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "com.sun.scenario.effect.impl.prism.PrFilterContext",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.bitcoinj.crypto.MnemonicCode",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "org.bitcoinj.crypto.DeterministicSeed",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.bitcoinj.crypto.DeterministicKey",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.bitcoinj.crypto.HDKeyDerivation",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "org.bouncycastle.jce.provider.BouncyCastleProvider",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "org.bouncycastle.jcajce.provider.digest.SHA256$Digest",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.bouncycastle.jcajce.provider.digest.SHA512$Digest",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.bouncycastle.jcajce.provider.digest.RIPEMD160$Digest",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.bouncycastle.jcajce.provider.symmetric.AES$ECB",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.bouncycastle.jcajce.provider.asymmetric.ec.KeyFactorySpi$EC",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.bouncycastle.crypto.ec.CustomNamedCurves",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "sun.security.provider.SHA2$SHA256",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "sun.security.provider.SHA5$SHA512",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "javax.crypto.spec.PBEKeySpec",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "javax.crypto.SecretKeyFactory",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true
+  }
+]
