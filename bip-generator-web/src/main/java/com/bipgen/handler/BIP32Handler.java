@@ -1,5 +1,9 @@
 package com.bipgen.handler;
 
+import com.bipgen.model.DerivedKeyResult;
+import com.bipgen.model.DerivedMultipleResult;
+import com.bipgen.model.MasterKeyResult;
+import com.bipgen.model.MnemonicValidationResult;
 import com.bipgen.service.BIP32Service;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -35,12 +39,12 @@ public class BIP32Handler {
                     return;
                 }
 
-                JsonObject result = bip32Service.generateMasterKey(customMnemonic, wordCount, passphrase);
+                MasterKeyResult result = bip32Service.generateMasterKey(customMnemonic, wordCount, passphrase);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);
@@ -79,12 +83,12 @@ public class BIP32Handler {
                     return;
                 }
 
-                JsonObject result = bip32Service.deriveChildKey(masterKey, path);
+                DerivedKeyResult result = bip32Service.deriveChildKey(masterKey, path);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);
@@ -134,12 +138,12 @@ public class BIP32Handler {
                     return;
                 }
 
-                JsonObject result = bip32Service.deriveMultipleAddresses(masterKey, pathPattern, count);
+                DerivedMultipleResult result = bip32Service.deriveMultipleAddresses(masterKey, pathPattern, count);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);
@@ -166,12 +170,12 @@ public class BIP32Handler {
                     return;
                 }
 
-                JsonObject result = bip32Service.validateMnemonic(mnemonic);
+                MnemonicValidationResult result = bip32Service.validateMnemonic(mnemonic);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);

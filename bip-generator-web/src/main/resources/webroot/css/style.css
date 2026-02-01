@@ -267,6 +267,19 @@ header h1 {
     font-size: 1rem;
 }
 
+.btn-paper-wallet {
+    background: #16a34a;
+    color: white;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.btn-paper-wallet:hover:not(:disabled) {
+    background: #15803d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+}
+
 .toast {
     position: fixed;
     bottom: 30px;

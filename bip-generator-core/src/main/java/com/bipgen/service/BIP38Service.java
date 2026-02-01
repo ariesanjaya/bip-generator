@@ -16,7 +16,8 @@ import org.bitcoinj.crypto.ECKey;
 import org.bitcoinj.params.MainNetParams;
 import org.bouncycastle.crypto.generators.SCrypt;
 
-import io.vertx.core.json.JsonObject;
+import com.bipgen.model.BIP38DecryptResult;
+import com.bipgen.model.BIP38EncryptResult;
 
 public class BIP38Service {
 
@@ -32,7 +33,7 @@ public class BIP38Service {
     /**
      * Encrypt a WIF private key with a password (BIP38)
      */
-    public JsonObject encrypt(String privateKeyWif, String password) throws Exception {
+    public BIP38EncryptResult encrypt(String privateKeyWif, String password) throws Exception {
         // Validate password
         if (password == null || password.length() < 4) {
             throw new IllegalArgumentException("Password must be at least 4 characters");
@@ -88,17 +89,13 @@ public class BIP38Service {
         // Encode with checksum (prefix is already in the data)
         String encryptedKey = encodeBase58WithChecksum(buffer.array());
 
-        JsonObject response = new JsonObject();
-        response.put("encryptedKey", encryptedKey);
-        response.put("compressed", compressed);
-
-        return response;
+        return new BIP38EncryptResult(encryptedKey, compressed);
     }
 
     /**
      * Decrypt a BIP38 encrypted key with password
      */
-    public JsonObject decrypt(String encryptedKey, String password) throws Exception {
+    public BIP38DecryptResult decrypt(String encryptedKey, String password) throws Exception {
         // Validate BIP38 format
         if (!encryptedKey.startsWith("6P")) {
             throw new IllegalArgumentException("Invalid BIP38 key format. Must start with '6P'");
@@ -171,12 +168,7 @@ public class BIP38Service {
         ECKey resultKey = ECKey.fromPrivate(privateKeyBytes, compressed);
         String privateKeyWif = resultKey.getPrivateKeyEncoded(params.network()).toString();
 
-        JsonObject response = new JsonObject();
-        response.put("privateKey", privateKeyWif);
-        response.put("address", addressStr);
-        response.put("compressed", compressed);
-
-        return response;
+        return new BIP38DecryptResult(privateKeyWif, addressStr, compressed);
     }
 
     /**

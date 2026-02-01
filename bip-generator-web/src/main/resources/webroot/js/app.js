@@ -261,6 +261,60 @@ decryptBtn.addEventListener('click', async () => {
     }
 });
 
+// Download Paper Wallet PDF
+document.getElementById('downloadPaperWalletBtn').addEventListener('click', async () => {
+    const mnemonic = document.getElementById('mnemonicOutput').textContent;
+    const derivedContainer = document.getElementById('derivedKeysContainer');
+    const firstKey = derivedContainer.querySelector('.derived-key-item');
+
+    if (!firstKey || !mnemonic) {
+        showToast('Please generate a wallet and derive keys first', 'error');
+        return;
+    }
+
+    // Extract data from the first derived key
+    const outputs = firstKey.querySelectorAll('.output-text.mono');
+    const address = outputs[0].textContent;
+    const privateKey = outputs[1].textContent;
+    const publicKey = outputs[2].textContent;
+    const path = document.getElementById('derivationPath').value.trim();
+    const passphrase = document.getElementById('bip39Passphrase').value || '';
+    const masterPrivateKey = document.getElementById('masterPrivOutput').textContent || '';
+    const masterPublicKey = document.getElementById('masterPubOutput').textContent || '';
+
+    const btn = document.getElementById('downloadPaperWalletBtn');
+    setLoading(btn, true);
+
+    try {
+        const response = await fetch(`${API_BASE}/paper-wallet`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mnemonic, address, privateKey, path, publicKey, passphrase, masterPrivateKey, masterPublicKey })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || 'Failed to generate PDF');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'paper-wallet.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        showToast('Paper wallet PDF downloaded!', 'success');
+    } catch (error) {
+        showToast(error.message, 'error');
+    } finally {
+        setLoading(btn, false);
+    }
+});
+
 // Helper function to display derived keys
 function displayDerivedKeys(keys) {
     const container = document.getElementById('derivedKeysContainer');

@@ -1,5 +1,7 @@
 package com.bipgen.handler;
 
+import com.bipgen.model.BIP38DecryptResult;
+import com.bipgen.model.BIP38EncryptResult;
 import com.bipgen.service.BIP38Service;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -44,12 +46,12 @@ public class BIP38Handler {
                     return;
                 }
 
-                JsonObject result = bip38Service.encrypt(privateKey, password);
+                BIP38EncryptResult result = bip38Service.encrypt(privateKey, password);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);
@@ -88,12 +90,12 @@ public class BIP38Handler {
                     return;
                 }
 
-                JsonObject result = bip38Service.decrypt(encryptedKey, password);
+                BIP38DecryptResult result = bip38Service.decrypt(encryptedKey, password);
 
                 ctx.response()
                     .setStatusCode(200)
                     .putHeader("content-type", "application/json")
-                    .end(result.encode());
+                    .end(JsonObject.mapFrom(result).encode());
 
             } catch (Exception e) {
                 handleError(ctx, e);

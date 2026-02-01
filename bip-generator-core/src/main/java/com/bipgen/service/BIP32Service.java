@@ -2,6 +2,7 @@ package com.bipgen.service;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,8 +18,11 @@ import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.wallet.DeterministicKeyChain;
 import org.bitcoinj.wallet.DeterministicSeed;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import com.bipgen.model.DerivedAddressResult;
+import com.bipgen.model.DerivedKeyResult;
+import com.bipgen.model.DerivedMultipleResult;
+import com.bipgen.model.MasterKeyResult;
+import com.bipgen.model.MnemonicValidationResult;
 
 public class BIP32Service {
 
@@ -34,7 +38,7 @@ public class BIP32Service {
      * @param wordCount Number of words (12 or 24)
      * @param passphrase Optional BIP39 passphrase (empty string if not used)
      */
-    public JsonObject generateMasterKey(String customMnemonic, int wordCount, String passphrase) throws Exception {
+    public MasterKeyResult generateMasterKey(String customMnemonic, int wordCount, String passphrase) throws Exception {
         DeterministicSeed seed;
 
         // Use empty string if passphrase is null
@@ -59,22 +63,19 @@ public class BIP32Service {
         DeterministicKeyChain keyChain = DeterministicKeyChain.builder().seed(seed).build();
         DeterministicKey masterKey = keyChain.getWatchingKey();
 
-        // Build response
-        JsonObject response = new JsonObject();
-        response.put("mnemonic", String.join(" ", seed.getMnemonicCode()));
-        // Serialize keys (using original methods as they are stable)
-        response.put("masterPrivateKey", masterKey.serializePrivB58(params.network()));
-        response.put("masterPublicKey", masterKey.serializePubB58(params.network()));
-        response.put("seed", seed.toHexString());
-        response.put("hasPassphrase", !actualPassphrase.isEmpty());
-
-        return response;
+        return new MasterKeyResult(
+            String.join(" ", seed.getMnemonicCode()),
+            masterKey.serializePrivB58(params.network()),
+            masterKey.serializePubB58(params.network()),
+            seed.toHexString(),
+            !actualPassphrase.isEmpty()
+        );
     }
 
     /**
      * Derive child key from master key using BIP32 path
      */
-    public JsonObject deriveChildKey(String masterKeyStr, String path) throws Exception {
+    public DerivedKeyResult deriveChildKey(String masterKeyStr, String path) throws Exception {
         // Parse master key (using stable method)
         DeterministicKey masterKey = DeterministicKey.deserializeB58(masterKeyStr, params.network());
 
@@ -83,27 +84,23 @@ public class BIP32Service {
 
         // Get address
         Address address = derivedKey.toAddress(ScriptType.P2PKH, params.network());
-        String addressStr = address.toString();
 
-        // Build response
-        JsonObject response = new JsonObject();
-        response.put("path", path);
-        // Format private key as WIF
-        response.put("privateKey", formatPrivateKeyAsWIF(derivedKey.getPrivKeyBytes(), true));
-        response.put("publicKey", derivedKey.getPublicKeyAsHex());
-        response.put("address", addressStr);
-
-        return response;
+        return new DerivedKeyResult(
+            path,
+            formatPrivateKeyAsWIF(derivedKey.getPrivKeyBytes(), true),
+            derivedKey.getPublicKeyAsHex(),
+            address.toString()
+        );
     }
 
     /**
      * Generate multiple addresses from a derivation path pattern
      */
-    public JsonObject deriveMultipleAddresses(String masterKeyStr, String pathPattern, int count) throws Exception {
+    public DerivedMultipleResult deriveMultipleAddresses(String masterKeyStr, String pathPattern, int count) throws Exception {
         // Parse master key (using stable method)
         DeterministicKey masterKey = DeterministicKey.deserializeB58(masterKeyStr, params.network());
 
-        JsonArray addresses = new JsonArray();
+        List<DerivedAddressResult> addresses = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
             String path = pathPattern.replace("*", String.valueOf(i));
@@ -111,22 +108,16 @@ public class BIP32Service {
 
             Address address = derivedKey.toAddress(ScriptType.P2PKH, params.network());
 
-            JsonObject addressInfo = new JsonObject();
-            addressInfo.put("index", i);
-            addressInfo.put("path", path);
-            addressInfo.put("address", address.toString());
-            // Format private key as WIF
-            addressInfo.put("privateKey", formatPrivateKeyAsWIF(derivedKey.getPrivKeyBytes(), true));
-            addressInfo.put("publicKey", derivedKey.getPublicKeyAsHex());
-
-            addresses.add(addressInfo);
+            addresses.add(new DerivedAddressResult(
+                i,
+                path,
+                address.toString(),
+                formatPrivateKeyAsWIF(derivedKey.getPrivKeyBytes(), true),
+                derivedKey.getPublicKeyAsHex()
+            ));
         }
 
-        JsonObject response = new JsonObject();
-        response.put("addresses", addresses);
-        response.put("count", count);
-
-        return response;
+        return new DerivedMultipleResult(addresses, count);
     }
 
     /**
@@ -170,30 +161,22 @@ public class BIP32Service {
     /**
      * Validate mnemonic phrase
      */
-    public JsonObject validateMnemonic(String mnemonic) {
-        JsonObject response = new JsonObject();
-
+    public MnemonicValidationResult validateMnemonic(String mnemonic) {
         try {
             List<String> words = List.of(mnemonic.trim().split("\\s+"));
 
             // Check word count
             if (words.size() != 12 && words.size() != 24) {
-                response.put("valid", false);
-                response.put("error", "Mnemonic must be 12 or 24 words");
-                return response;
+                return new MnemonicValidationResult(false, 0, "Mnemonic must be 12 or 24 words");
             }
 
             // Try to create seed (will throw if invalid)
             DeterministicSeed.ofMnemonic(words, "", Instant.now());
 
-            response.put("valid", true);
-            response.put("wordCount", words.size());
+            return new MnemonicValidationResult(true, words.size(), null);
 
         } catch (Exception e) {
-            response.put("valid", false);
-            response.put("error", e.getMessage());
+            return new MnemonicValidationResult(false, 0, e.getMessage());
         }
-
-        return response;
     }
 }

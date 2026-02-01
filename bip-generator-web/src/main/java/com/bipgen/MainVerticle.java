@@ -2,6 +2,7 @@ package com.bipgen;
 
 import com.bipgen.handler.BIP32Handler;
 import com.bipgen.handler.BIP38Handler;
+import com.bipgen.handler.PaperWalletHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
@@ -17,6 +18,7 @@ public class MainVerticle extends AbstractVerticle {
         // Initialize handlers
         BIP32Handler bip32Handler = new BIP32Handler();
         BIP38Handler bip38Handler = new BIP38Handler();
+        PaperWalletHandler paperWalletHandler = new PaperWalletHandler();
 
         // Create router
         Router router = Router.router(vertx);
@@ -42,6 +44,9 @@ public class MainVerticle extends AbstractVerticle {
         // API Routes - BIP38
         router.post("/api/bip38/encrypt").handler(bip38Handler.encrypt());
         router.post("/api/bip38/decrypt").handler(bip38Handler.decrypt());
+
+        // API Routes - Paper Wallet
+        router.post("/api/paper-wallet").handler(paperWalletHandler.generate());
 
         // Health check endpoint
         router.get("/api/health").handler(ctx -> {
@@ -75,6 +80,7 @@ public class MainVerticle extends AbstractVerticle {
                     System.out.println("║       - POST /api/bip32/validate-mnemonic                  ║");
                     System.out.println("║       - POST /api/bip38/encrypt                            ║");
                     System.out.println("║       - POST /api/bip38/decrypt                            ║");
+                    System.out.println("║       - POST /api/paper-wallet                             ║");
                     System.out.println("║       - GET  /api/health                                   ║");
                     System.out.println("║                                                            ║");
                     System.out.println("╚════════════════════════════════════════════════════════════╝");
